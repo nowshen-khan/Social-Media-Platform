@@ -13,13 +13,14 @@ export function middleware(req) {
 	}
 
 	// CSP Middleware
-	const response = NextResponse.next(); // Continue with the request flow
-	response.headers.set(
-		"Content-Security-Policy",
-		"default-src 'self'; img-src https:; script-src 'self'; style-src 'self';"
-	);
+	// const response = NextResponse.next(); // Continue with the request flow
+	// response.headers.set(
+	// 	"Content-Security-Policy",
+	// 	"default-src 'self'; img-src https:; script-src 'self'; style-src 'self';"
+	// );
 
-	return response;
+	// return response;
+	return NextResponse.next(); // Continue with the request flow
 }
 
 export const config = {
