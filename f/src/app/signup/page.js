@@ -1,97 +1,149 @@
-export default function Example() {
+"use client";
+import { useState } from "react";
+
+export default function SignupPage() {
+	const [formData, setFormData] = useState({
+		fullName: "",
+		email: "",
+		password: "",
+		dob: "",
+		gender: "",
+	});
+	const [showPassword, setShowPassword] = useState(false);
+
+	const [loading, setLoading] = useState(false);
+	const [error, setError] = useState("");
+	const [success, setSuccess] = useState("");
+
+	const handleChange = (e) => {
+		const { name, value } = e.target;
+		setFormData({ ...formData, [name]: value });
+	};
+
+	const handleSubmit = async (e) => {
+		e.preventDefault();
+		setLoading(true);
+		setError("");
+		setSuccess("");
+
+		//console.log("Signup Data:", formData);
+		// API কল করুন
+		try {
+			// API Call
+			const res = await fetch("/api/signup", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify(formData),
+			});
+			//console.log("Sending Data:", JSON.stringify(formData));
+
+			const data = await res.json();
+
+			if (!res.ok) {
+				throw new Error(data.message || "Something went wrong!");
+			}
+			console.log("Success:", data);
+			setSuccess("Signup successful!");
+			setFormData({
+				fullName: "",
+				email: "",
+				password: "",
+
+				dob: "",
+				gender: "",
+			});
+
+			// TODO: Redirect to login page
+		} catch (err) {
+			setError(err.message);
+		} finally {
+			setLoading(false);
+		}
+	};
+
 	return (
-		<>
-			{/*
-        This example requires updating your template:
-
-        ```
-        <html class="h-full bg-white">
-        <body class="h-full">
-        ```
-      */}
-			<div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-				<div className="sm:mx-auto sm:w-full sm:max-w-sm">
-					<img
-						alt="Your Company"
-						src="https://tailwindui.com/plus/img/logos/mark.svg?color=indigo&shade=600"
-						className="mx-auto h-10 w-auto"
+		<div className="flex items-center justify-center min-h-screen bg-gray-100">
+			<div className="w-full max-w-md bg-white p-6 rounded-lg shadow-md">
+				<h2 className="text-2xl font-bold text-center mb-4">Join Us!</h2>
+				<form onSubmit={handleSubmit} className="space-y-4">
+					{error && <p className="text-red-500">{error}</p>}
+					{success && <p className="text-green-500">{success}</p>}
+					<input
+						type="text"
+						name="fullName"
+						placeholder="Full Name (e.g., John Doe)"
+						value={formData.fullName}
+						onChange={handleChange}
+						required
+						className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 text-gray-600"
 					/>
-					<h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900">
-						Sign in to your account
-					</h2>
-				</div>
-
-				<div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-					<form action="#" method="POST" className="space-y-6">
-						<div>
-							<label
-								htmlFor="email"
-								className="block text-sm/6 font-medium text-gray-900"
-							>
-								Email address
-							</label>
-							<div className="mt-2">
-								<input
-									id="email"
-									name="email"
-									type="email"
-									required
-									autoComplete="email"
-									className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-								/>
-							</div>
-						</div>
-
-						<div>
-							<div className="flex items-center justify-between">
-								<label
-									htmlFor="password"
-									className="block text-sm/6 font-medium text-gray-900"
-								>
-									Password
-								</label>
-								<div className="text-sm">
-									<a
-										href="#"
-										className="font-semibold text-indigo-600 hover:text-indigo-500"
-									>
-										Forgot password?
-									</a>
-								</div>
-							</div>
-							<div className="mt-2">
-								<input
-									id="password"
-									name="password"
-									type="password"
-									required
-									autoComplete="current-password"
-									className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-								/>
-							</div>
-						</div>
-
-						<div>
-							<button
-								type="submit"
-								className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-							>
-								Sign in
-							</button>
-						</div>
-					</form>
-
-					<p className="mt-10 text-center text-sm/6 text-gray-500">
-						Not a member?{" "}
-						<a
-							href="#"
-							className="font-semibold text-indigo-600 hover:text-indigo-500"
+					<input
+						type="email"
+						name="email"
+						placeholder="Email"
+						value={formData.email}
+						onChange={handleChange}
+						required
+						className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 text-gray-600"
+					/>
+					<div className="relative">
+						<input
+							type={showPassword ? "text" : "password"}
+							name="password"
+							placeholder="Password"
+							value={formData.password}
+							onChange={handleChange}
+							required
+							className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 text-gray-600"
+						/>
+						<button
+							type="button"
+							className="absolute top-2 right-2 text-gray-600"
+							onClick={() => setShowPassword(!showPassword)}
 						>
-							Start a 14 day free trial
-						</a>
-					</p>
-				</div>
+							{showPassword ? "Hide" : "Show"}
+						</button>
+					</div>
+					<input
+						type="date"
+						name="dob"
+						value={formData.dob}
+						onChange={handleChange}
+						required
+						className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 text-gray-600"
+					/>
+					<div className="flex items-center gap-4">
+						Gender
+						<label className="flex items-center">
+							<input
+								type="radio"
+								name="gender"
+								value="Male"
+								onChange={handleChange}
+								className="mr-2 text-gray-600"
+							/>
+							Male
+						</label>
+						<label className="flex items-center">
+							<input
+								type="radio"
+								name="gender"
+								value="Female"
+								onChange={handleChange}
+								className="mr-2 text-gray-600"
+							/>
+							Female
+						</label>
+					</div>
+					<button
+						type="submit"
+						disabled={loading}
+						className="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
+					>
+						{loading ? "Submitting..." : "Sign Up"}
+					</button>
+				</form>
 			</div>
-		</>
+		</div>
 	);
 }

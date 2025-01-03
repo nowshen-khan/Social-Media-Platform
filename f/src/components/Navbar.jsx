@@ -134,7 +134,7 @@ export default function Navbar() {
 							</Menu>
 						) : (
 							<button className="rounded-md bg-blue-500 px-4 py-2 text-sm text-white hover:bg-blue-600">
-								Login
+								<Link href="/login">Login</Link>
 							</button>
 						)}
 					</div>

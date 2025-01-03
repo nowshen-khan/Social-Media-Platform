@@ -1,13 +1,15 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import useAuthStore from "@/store/authStore";
 import verifyToken from "@/utils/verifyToken";
+import Link from "next/link";
 
 export default function LoginPage() {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
+	const [status, setStatus] = useState("");
 	const router = useRouter();
 
 	const { login } = useAuthStore();
@@ -27,11 +29,13 @@ export default function LoginPage() {
 
 			const isValid = await verifyToken(token);
 			if (isValid) {
-				login({ name: "John Doe", email: "john@example.com" });
+				login({ email });
 				router.push("/"); // লগইন সফল হলে হোমপেজে রিডিরেক্ট
+				console.log("Login successful!");
 			}
 		} else {
-			alert("Invalid login credentials");
+			setStatus("Invalid login credentials");
+			console.log("Login failed!");
 		}
 	};
 
@@ -48,7 +52,9 @@ export default function LoginPage() {
 						Sign in to your account
 					</h2>
 				</div>
-
+				{status && (
+					<p className="mt-2 text-center text-sm/6 text-red-600">{status}</p>
+				)}
 				<div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
 					<form
 						action="#"
@@ -120,12 +126,12 @@ export default function LoginPage() {
 
 					<p className="mt-10 text-center text-sm/6 text-gray-500">
 						Not a member?{" "}
-						<a
-							href="#"
+						<Link
+							href="/signup"
 							className="font-semibold text-indigo-600 hover:text-indigo-500"
 						>
-							Start a 14 day free trial
-						</a>
+							Join now
+						</Link>
 					</p>
 				</div>
 			</div>
