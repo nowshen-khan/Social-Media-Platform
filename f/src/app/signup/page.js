@@ -1,5 +1,7 @@
 "use client";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function SignupPage() {
 	const [formData, setFormData] = useState({
@@ -14,6 +16,8 @@ export default function SignupPage() {
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState("");
 	const [success, setSuccess] = useState("");
+
+	const router = useRouter();
 
 	const handleChange = (e) => {
 		const { name, value } = e.target;
@@ -54,6 +58,7 @@ export default function SignupPage() {
 			});
 
 			// TODO: Redirect to login page
+			router.push("/login");
 		} catch (err) {
 			setError(err.message);
 		} finally {
@@ -64,7 +69,9 @@ export default function SignupPage() {
 	return (
 		<div className="flex items-center justify-center min-h-screen bg-gray-100">
 			<div className="w-full max-w-md bg-white p-6 rounded-lg shadow-md">
-				<h2 className="text-2xl font-bold text-center mb-4">Join Us!</h2>
+				<h2 className="text-2xl font-bold text-center mb-4 text-indigo-600">
+					Join Us!
+				</h2>
 				<form onSubmit={handleSubmit} className="space-y-4">
 					{error && <p className="text-red-500">{error}</p>}
 					{success && <p className="text-green-500">{success}</p>}
@@ -98,7 +105,7 @@ export default function SignupPage() {
 						/>
 						<button
 							type="button"
-							className="absolute top-2 right-2 text-gray-600"
+							className="absolute top-2 right-2 text-gray-500"
 							onClick={() => setShowPassword(!showPassword)}
 						>
 							{showPassword ? "Hide" : "Show"}
@@ -110,17 +117,17 @@ export default function SignupPage() {
 						value={formData.dob}
 						onChange={handleChange}
 						required
-						className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 text-gray-600"
+						className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 text-gray-400"
 					/>
-					<div className="flex items-center gap-4">
+					<div className="flex items-center gap-4 text-gray-500">
 						Gender
-						<label className="flex items-center">
+						<label className="flex items-center ">
 							<input
 								type="radio"
 								name="gender"
 								value="Male"
 								onChange={handleChange}
-								className="mr-2 text-gray-600"
+								className="mr-2 "
 							/>
 							Male
 						</label>
@@ -143,6 +150,15 @@ export default function SignupPage() {
 						{loading ? "Submitting..." : "Sign Up"}
 					</button>
 				</form>
+				<p className="mt-10 text-center text-sm/6 text-gray-500">
+					Have an account?{" "}
+					<Link
+						href="/login"
+						className="font-semibold text-indigo-600 hover:text-indigo-500"
+					>
+						Sign in
+					</Link>
+				</p>
 			</div>
 		</div>
 	);
