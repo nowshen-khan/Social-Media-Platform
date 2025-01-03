@@ -4,12 +4,15 @@ export function middleware(req) {
 	const token = req.cookies.get("authToken")?.value;
 	const url = req.nextUrl.clone();
 
+	if (token && (url.pathname === "/login" || url.pathname === "/signup")) {
+		url.pathname = "/"; // Redirect to home page if already logged in
+		return NextResponse.redirect(url);
+	}
+
 	// Authentication Middleware
-	if (!token) {
-		if (url.pathname !== "/login") {
-			url.pathname = "/login";
-			return NextResponse.redirect(url); // If no token, redirect to login
-		}
+	if (!token && url.pathname !== "/login" && url.pathname !== "/signup") {
+		url.pathname = "/login";
+		return NextResponse.redirect(url); // If no token, redirect to login
 	}
 
 	// CSP Middleware
@@ -24,5 +27,5 @@ export function middleware(req) {
 }
 
 export const config = {
-	matcher: ["/news-feed", "/profile", "/settings", "/"], // Specify paths where this middleware applies
+	matcher: ["/", "/login", "/signup"], // Specify paths where this middleware applies
 };
