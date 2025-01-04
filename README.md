@@ -123,11 +123,11 @@ Contributions are welcome! Follow these steps to contribute:
 3. Commit and push your changes.
 4. Submit a pull request.
 
-# License
+## License
 This project is licensed under the MIT License.
 
-# Contact
+## Contact
 For any questions or feedback, reach out via email at: [nowshen.anjum@gmail.com]
 
-# Acknowledgments
+## Acknowledgments
 This project was created by [Nowshen Anjuman Khan].
