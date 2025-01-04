@@ -34,7 +34,7 @@ export default function SignupPage() {
 		// API কল করুন
 		try {
 			// API Call
-			const res = await fetch("/api/signup", {
+			const res = await fetch("/api/auth/signup", {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify(formData),
