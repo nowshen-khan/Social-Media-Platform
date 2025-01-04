@@ -131,3 +131,6 @@ For any questions or feedback, reach out via email at: [nowshen.anjum@gmail.com]
 
 ## Acknowledgments
 This project was created by [Nowshen Anjuman Khan].
+
+## Thank You
+Thank you for using the Social Media Platform! We hope you have a great experience and enjoy connecting with others.
