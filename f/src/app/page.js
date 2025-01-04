@@ -3,7 +3,6 @@ import Link from "next/link";
 
 export default function Home() {
 	return (
-		<div className="container mx-auto ">
 			<h1 className="text-2xl font-bold ">Hello World</h1>
 			<ul className="flex space-x-4">
 				<li className="text-blue-500">
