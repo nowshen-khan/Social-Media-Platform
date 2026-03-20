@@ -2,6 +2,7 @@ import dbConnect from "@/utils/dbConnect";
 import User from "@/models/User";
 import bcrypt from "bcryptjs";
 import { NextResponse } from "next/server";
+import VerificationCode from "@/models/VerificationCode";
 
 export async function POST(request) {
 	try {
@@ -24,6 +25,26 @@ export async function POST(request) {
 				{ status: 400 }
 			);
 		}
+
+		const code = Math.floor(100000 + Math.random() * 900000).toString(); // Generate a random 6-digit code
+
+		await VerificationCode.updateOne({ email }, { code }, { upsert: true }); // Update or create the verification code
+
+		// Send verification email
+		const transporter = nodemailer.createTransport({
+			service: "gmail",
+			auth: {
+				user: process.env.EMAIL,
+				pass: process.env.EMAIL_PASSWORD,
+			},
+		});
+
+		await transporter.sendMail({
+			from: process.env.EMAIL,
+			to: email,
+			subject: "Email Verification",
+			text: `Your verification code is: ${code}`,
+		});
 
 		// Hash the password
 		const hashedPassword = await bcrypt.hash(password, 10);
